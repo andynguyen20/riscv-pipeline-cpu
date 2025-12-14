@@ -29,5 +29,4 @@ module alu_decoder(
                 endcase
         endcase
     end
-    
 endmodule

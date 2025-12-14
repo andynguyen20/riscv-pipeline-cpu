@@ -91,6 +91,5 @@ module core(
     
     // Write Back
     
-    mux3 wb(.d0(alu_result_wb), .d1(read_data_wb), .d2(pc_plus4_wb), .sel(result_src_wb), .y(result_wb));
-    
+    mux3 wb(.d0(alu_result_wb), .d1(read_data_wb), .d2(pc_plus4_wb), .sel(result_src_wb), .y(result_wb));   
 endmodule

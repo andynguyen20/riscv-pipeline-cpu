@@ -12,6 +12,5 @@ module dff(
             q <= 0;
         else 
             q <= d;
-    end     
-    
+    end       
 endmodule

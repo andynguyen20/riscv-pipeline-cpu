@@ -70,6 +70,5 @@ module ID_EX(
             alu_control_ex <= alu_control_id;
             alu_src_ex <= alu_src_id;
         end
-     end
-         
+     end        
 endmodule

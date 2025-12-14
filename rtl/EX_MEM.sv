@@ -47,6 +47,5 @@ module EX_MEM(
             result_src_mem <= result_src_ex;
             mem_write_mem <= mem_write_ex;
         end
-    end
-    
+    end 
 endmodule

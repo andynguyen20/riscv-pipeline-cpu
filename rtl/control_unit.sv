@@ -19,6 +19,5 @@ module control_unit(
    main_decoder md(.op(op), .result_src(result_src), .mem_write(mem_write), .branch(branch),
     .alu_src(alu_src), .reg_write(reg_write), .jump(jump), .imm_src(imm_src), .alu_op(alu_op));
     
-   alu_decoder ad(.opb5(op[5]), .funct3(funct3), .funct7b5(funct7b5), .alu_op(alu_op), .alu_control(alu_control));
-    
+   alu_decoder ad(.opb5(op[5]), .funct3(funct3), .funct7b5(funct7b5), .alu_op(alu_op), .alu_control(alu_control));  
 endmodule

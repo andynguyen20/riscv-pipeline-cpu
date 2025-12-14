@@ -12,5 +12,4 @@ module mux2(
             1'b1: y = d1;
         endcase
     end
-    
 endmodule

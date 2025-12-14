@@ -13,7 +13,6 @@ module cpu(
     
     instruction_memory imem(.addr(pc_if), .read_data(instr));
     
-    data_memory dmem(.clk(clk), .write_en(mem_write_mem), .addr(data_addr), .write_data(write_data), .read_data(read_data_mem));
-    
+    data_memory dmem(.clk(clk), .write_en(mem_write_mem), .addr(data_addr), .write_data(write_data), .read_data(read_data_mem)); 
     
 endmodule

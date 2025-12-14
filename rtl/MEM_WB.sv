@@ -42,7 +42,6 @@ module MEM_WB(
             reg_write_wb <= reg_write_mem;
             result_src_wb <= result_src_mem;
         end
-    end
-    
+    end  
        
 endmodule
