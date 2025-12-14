@@ -46,5 +46,4 @@ module main_decoder_tb;
         #10;
         $finish;
      end    
-
 endmodule

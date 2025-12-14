@@ -37,5 +37,4 @@ module dff_tb;
         $finish;
     end
 
-
 endmodule

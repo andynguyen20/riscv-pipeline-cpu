@@ -37,4 +37,5 @@ module mux2_tb;
         #10;
         $finish;
     end
+    
 endmodule

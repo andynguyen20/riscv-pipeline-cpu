@@ -65,4 +65,5 @@ module mux3_tb;
         #10;
         $finish;
     end
+    
 endmodule

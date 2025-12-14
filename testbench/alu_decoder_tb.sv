@@ -45,7 +45,6 @@ module alu_decoder_tb;
         funct3 = 3'bxxx;
         #10;
         $finish;
-     end
-        
+     end      
 
 endmodule

@@ -23,5 +23,4 @@ module adder_tb;
         #10;
         $finish;
      end
-
 endmodule

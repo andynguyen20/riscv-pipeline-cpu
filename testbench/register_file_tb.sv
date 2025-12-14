@@ -50,5 +50,4 @@ module register_file_tb;
         
         $finish;
      end
-
 endmodule
