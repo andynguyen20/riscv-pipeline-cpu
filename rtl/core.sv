@@ -44,23 +44,24 @@ module core(
     // Instruction Decode / Execute pipeline register
     
     logic [31:0] read_data1_ex, read_data2_ex, pc_plus4_ex;
-    logic [4:0] reg_dest_ex;
+    logic [4:0] reg_dest_ex, source_reg1_ex, source_reg2_ex;
     logic [2:0] alu_control_ex;
     logic [1:0] result_src_ex;
     logic reg_write_ex, mem_write_ex, jump_ex, branch_ex, alu_src_ex; 
     
-     ID_EX pr2(.clk(clk), .reset(reset), .read_data1_id(read_data1_id), .read_data2_id(read_data2_id), .pc_id(pc_id), .reg_dest_id(instr_id[11:7]), .imm_ext_id(imm_ext_id), .pc_plus4_id(pc_plus4_id), 
-     .reg_write_id(reg_write_id), .result_src_id(result_src_id), .mem_write_id(mem_write_id), .jump_id(jump_id), .branch_id(branch_id), .alu_control_id(alu_control_id), .alu_src_id(alu_src_id), 
-     .read_data1_ex(read_data1_ex), .read_data2_ex(read_data2_ex), .pc_ex(pc_ex), .reg_dest_ex(reg_dest_ex), .imm_ext_ex(imm_ext_ex), .pc_plus4_ex(pc_plus4_ex), .reg_write_ex(reg_write_ex), 
+     ID_EX pr2(.clk(clk), .reset(reset), .read_data1_id(read_data1_id), .read_data2_id(read_data2_id), .pc_id(pc_id), .source_reg1_id(instr_id[19:15]), .source_reg2_id(instr_id[24:20]), .reg_dest_id(instr_id[11:7]), 
+     .imm_ext_id(imm_ext_id), .pc_plus4_id(pc_plus4_id), .reg_write_id(reg_write_id), .result_src_id(result_src_id), .mem_write_id(mem_write_id), .jump_id(jump_id), .branch_id(branch_id), .alu_control_id(alu_control_id), 
+     .alu_src_id(alu_src_id), .read_data1_ex(read_data1_ex), .read_data2_ex(read_data2_ex), .pc_ex(pc_ex), .source_reg1_ex(source_reg1_ex), .source_reg2_ex(source_reg2_ex), .reg_dest_ex(reg_dest_ex), .imm_ext_ex(imm_ext_ex), .pc_plus4_ex(pc_plus4_ex), .reg_write_ex(reg_write_ex), 
      .result_src_ex(result_src_ex), .mem_write_ex(mem_write_ex), .jump_ex(jump_ex), .branch_ex(branch_ex), .alu_control_ex(alu_control_ex), .alu_src_ex(alu_src_ex));
     
     // Execute Stage
     
-    logic [31:0] src_b_ex, alu_result_ex;
+    logic [31:0] src_b_ex, alu_result_ex, src_a_ex;
+    logic [31:0] write_data_ex;
     logic zero_ex;
     
-    mux2 srcbmux(.d0(read_data2_ex), .d1(imm_ext_ex), .sel(alu_src_ex), .y(src_b_ex));
-    alu alu(.a(read_data1_ex), .b(src_b_ex), .alu_control(alu_control_ex), .alu_result(alu_result_ex), .zero(zero_ex));
+    mux2 srcbmux(.d0(write_data_ex), .d1(imm_ext_ex), .sel(alu_src_ex), .y(src_b_ex));
+    alu alu(.a(src_a_ex), .b(src_b_ex), .alu_control(alu_control_ex), .alu_result(alu_result_ex), .zero(zero_ex));
     
     logic bra_and_zero;
     assign bra_and_zero = branch_ex && zero_ex;
@@ -73,7 +74,7 @@ module core(
     logic [1:0] result_src_mem;
     logic reg_write_mem;
     
-    EX_MEM pr3(.clk(clk), .reset(reset), .alu_result_ex(alu_result_ex), .write_data_ex(read_data2_ex), .reg_dest_ex(reg_dest_ex), .pc_plus4_ex(pc_plus4_ex), .reg_write_ex(reg_write_ex), .result_src_ex(result_src_ex), 
+    EX_MEM pr3(.clk(clk), .reset(reset), .alu_result_ex(alu_result_ex), .write_data_ex(write_data_ex), .reg_dest_ex(reg_dest_ex), .pc_plus4_ex(pc_plus4_ex), .reg_write_ex(reg_write_ex), .result_src_ex(result_src_ex), 
     .mem_write_ex(mem_write_ex), .alu_result_mem(alu_result_mem), .write_data_mem(write_data_mem), .reg_dest_mem(reg_dest_mem), .pc_plus4_mem(pc_plus4_mem), .reg_write_mem(reg_write_mem), .result_src_mem(result_src_mem), 
     .mem_write_mem(mem_write_mem));
     
@@ -91,5 +92,24 @@ module core(
     
     // Write Back
     
-    mux3 wb(.d0(alu_result_wb), .d1(read_data_wb), .d2(pc_plus4_wb), .sel(result_src_wb), .y(result_wb));   
+    mux3 wb(.d0(alu_result_wb), .d1(read_data_wb), .d2(pc_plus4_wb), .sel(result_src_wb), .y(result_wb));
+    
+    // Hazard Unit (Forwarding)
+    
+    logic [1:0] forward_ae, forward_be;
+    
+     hazard_unit hu(
+    .source_reg1_ex(source_reg1_ex),
+    .source_reg2_ex(source_reg2_ex),
+    .reg_dest_mem(reg_dest_mem),
+    .reg_dest_wb(reg_dest_wb),
+    .reg_write_mem(reg_write_mem),
+    .reg_write_wb(reg_write_wb),
+    .forward_ae(forward_ae),
+    .forward_be(forward_be));
+    
+    
+    mux3 fw1(.d0(read_data1_ex), .d1(result_wb), .d2(alu_result_mem), .sel(forward_ae), .y(src_a_ex));
+    mux3 fw2(.d0(read_data2_ex), .d1(result_wb), .d2(alu_result_mem), .sel(forward_be), .y(write_data_ex));
+    
 endmodule
