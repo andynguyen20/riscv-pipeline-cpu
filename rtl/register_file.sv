@@ -17,4 +17,5 @@ module register_file(
     
     assign read_data1 = (addr1 != 5'b00000) ? reg_file[addr1] : {32{1'b0}};
     assign read_data2 = (addr2 != 5'b00000) ? reg_file[addr2] : {32{1'b0}};
+
 endmodule

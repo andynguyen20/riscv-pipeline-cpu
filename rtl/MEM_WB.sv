@@ -21,7 +21,7 @@ module MEM_WB(
     output logic [1:0] result_src_wb 
     );
     
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk, posedge reset) begin
         if(reset) begin
         //datapath components
             alu_result_wb <= 0;
@@ -42,6 +42,7 @@ module MEM_WB(
             reg_write_wb <= reg_write_mem;
             result_src_wb <= result_src_mem;
         end
-    end  
+    end
+    
        
 endmodule

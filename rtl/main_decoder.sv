@@ -86,6 +86,7 @@ module main_decoder(
                 jump = 1'bx;
             end
         endcase
-    end 
+    end
+   
     
 endmodule

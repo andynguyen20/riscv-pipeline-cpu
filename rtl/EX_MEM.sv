@@ -24,7 +24,7 @@ module EX_MEM(
     output logic mem_write_mem
     );
     
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk, posedge reset) begin
         if(reset) begin
         //datapath components
             alu_result_mem <= 0;
@@ -47,5 +47,6 @@ module EX_MEM(
             result_src_mem <= result_src_ex;
             mem_write_mem <= mem_write_ex;
         end
-    end 
+    end
+    
 endmodule

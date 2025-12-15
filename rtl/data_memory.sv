@@ -15,4 +15,5 @@ module data_memory(
     end 
     
     assign read_data = RAM[addr[31:2]];
+    
 endmodule

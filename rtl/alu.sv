@@ -19,6 +19,7 @@ module alu(
     end
     
     
-    assign zero = (alu_result == {32{1'b0}}) ? 1'b1 : 1'b0;    
+    assign zero = (alu_result == {32{1'b0}}) ? 1'b1 : 1'b0;
+    
     
 endmodule

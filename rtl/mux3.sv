@@ -13,5 +13,6 @@ module mux3(
             2'b10: y = d2;
             2'b11: y = d2;
         endcase
-    end   
+    end 
+    
 endmodule

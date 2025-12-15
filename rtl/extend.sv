@@ -14,5 +14,6 @@ module extend(
             2'b11: imm_ext = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0}; //21-bit signed immediatem | J-type
             default: imm_ext = 32'bx;
         endcase
-    end   
+    end
+    
 endmodule

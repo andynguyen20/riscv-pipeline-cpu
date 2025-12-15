@@ -11,6 +11,7 @@ module instruction_memory(
         $readmemb("instruction.mem", instruction_mem);
     end 
     
-    assign read_data = instruction_mem[addr[31:2]]; // byte addressing  
+    assign read_data = instruction_mem[addr[31:2]]; // byte addressing
+    
 endmodule
 
